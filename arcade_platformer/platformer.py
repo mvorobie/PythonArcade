@@ -39,7 +39,7 @@ class Platformer(arcade.Window):
         self
 
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     window = Platformer()
     window.setup()
     arcade.run()
