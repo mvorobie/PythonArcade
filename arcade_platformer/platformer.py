@@ -26,12 +26,14 @@ RIGHT_VIEWPORT_MARGIN = 300
 TOP_VIEWPORT_MARGIN = 150
 BOTTOM_VIEWPORT_MARGIN = 150
 
+# Joystick control
+DEAD_ZONE = 0.1
 
 # Assets path
 ASSETS_PATH = pathlib.Path(__file__).resolve().parent.parent / "assets"
-class Platformer(arcade.Window):
+class PlatformerView(arcade.View):
     def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        super().__init__()
 
         # These lists will hold different sets of sprites
         self.coins = None
@@ -65,6 +67,18 @@ class Platformer(arcade.Window):
         self.victory_sound = arcade.load_sound(
             str(ASSETS_PATH / "sounds" / "victory.wav")
         )
+
+        # Check if a joystick is connected
+        joysticks = arcade.get_joysticks()
+
+        if joysticks:
+            # If so, get the first one
+            self.joystick = joysticks[0]
+            self.joystick.open()
+        else:
+            # If not, flag it so we won't use it
+            print("There are no Joysticks")
+            self.joystick = None
 
     def setup(self):
         """Sets up the game for the current level"""
@@ -251,6 +265,28 @@ class Platformer(arcade.Window):
         Arguments:
             delta_time {float} -- How much time since last call
         """
+
+        # First, check for joystick movement
+        if self.joystick:
+            # Check if we're in the dead zone
+            if abs(self.joystick.x) > DEAD_ZONE:
+                self.player.change_x = self.joystick.x * PLAYER_MOVE_SPEED
+            else:
+                self.player.change_x = 0
+
+            if abs(self.joystick.y) > DEAD_ZONE:
+                if self.physics_engine.is_on_ladder():
+                    self.player.change_y = self.joystick.y * PLAYER_MOVE_SPEED
+                else:
+                    self.player.change_y = 0
+
+            # Did the user press the jump button?
+            if self.joystick.buttons[0]:
+                if self.physics_engine.can_jump():
+                    self.player.change_y = PLAYER_JUMP_SPEED
+                    # Play the jump sound
+                    arcade.play_sound(self.jump_sound)
+
         # Update the player animation
         self.player.update_animation(delta_time)
 
@@ -370,6 +406,10 @@ class Platformer(arcade.Window):
 
 
 if __name__ == "__main__":
-    window = Platformer()
-    window.setup()
+    window = arcade.Window(
+        width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title=SCREEN_TITLE
+    )
+    platform_view = PlatformerView()
+    platform_view.setup()
+    window.show_view(platform_view)
     arcade.run()
