@@ -5,9 +5,10 @@ import pathlib
 # Game constants
 # Window dimensions
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 650
+SCREEN_WIDTH = 1290
+SCREEN_HEIGHT = 720
 SCREEN_TITLE = "Arcade Platformer"
+MAP_WIDTH = 3072
 
 # Scaling constants
 MAP_SCALING = 1.0
@@ -17,11 +18,11 @@ GRAVITY = 1.0
 PLAYER_START_X = 65
 PLAYER_START_Y = 256
 PLAYER_MOVE_SPEED = 10
-PLAYER_JUMP_SPEED = 20
+PLAYER_JUMP_SPEED = 25
 
 
 # Viewport margins
-LEFT_VIEWPORT_MARGIN = 50
+LEFT_VIEWPORT_MARGIN = 300
 RIGHT_VIEWPORT_MARGIN = 300
 TOP_VIEWPORT_MARGIN = 150
 BOTTOM_VIEWPORT_MARGIN = 150
@@ -296,6 +297,9 @@ class PlatformerView(arcade.View):
         # Restrict user movement so they can't walk off screen
         if self.player.left < 0:
             self.player.left = 0
+
+        if self.player.right > MAP_WIDTH:
+            self.player.right = MAP_WIDTH
 
         # Check if we've picked up a coin
         coins_hit = arcade.check_for_collision_with_list(

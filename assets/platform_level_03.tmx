@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="128" tileheight="128" infinite="0" nextlayerid="6" nextobjectid="8">
+ <tileset firstgid="1" source="arcade_platformer.tsx"/>
+ <layer id="1" name="ground" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztkTEKACAMxAp+QP3/Y3VQkKPFXtGtgSzldIlI4qVOO9yaYYd31g63ZSnKTdOz0f5MeG4d27G97bD7huno2Wb3OJ7ejNHerAnPy86WP1qjA73sBn4=
+  </data>
+ </layer>
+ <layer id="2" name="ladders" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFhIAiHexQGLWDbDtoET/odqDzaQFG7RhYO0bz+agdQx0AAMFEAkQ=
+  </data>
+ </layer>
+ <layer id="3" name="background" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBg+QAmPnDyRZiCrU6bALaNgcABi430UDA9ASnzD1I7m88EPVHCIk5O/h3OZAACdawFm
+  </data>
+ </layer>
+ <objectgroup id="5" name="coins">
+  <object id="1" gid="24" x="9.64419" y="1309.62" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="20"/>
+   </properties>
+  </object>
+  <object id="2" gid="24" x="1536.96" y="1280.81" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="20"/>
+   </properties>
+  </object>
+  <object id="3" gid="24" x="2949.01" y="128.115" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="20"/>
+   </properties>
+  </object>
+  <object id="4" gid="23" x="896.576" y="778.105" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="5" gid="23" x="2433.5" y="768.499" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="6" gid="23" x="1412.09" y="2315.03" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="7" gid="23" x="2945.81" y="1536.96" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer id="4" name="goal" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA9kKODHbJ0sGMUjIJRMApGwSgYrAAAsm8APA==
+  </data>
+ </layer>
+</map>

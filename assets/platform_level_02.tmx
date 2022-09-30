@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="128" tileheight="128" infinite="0" nextlayerid="6" nextobjectid="10">
+ <tileset firstgid="1" source="arcade_platformer.tsx"/>
+ <layer id="1" name="ground" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjALKgSCNMDJgphEeBSMb0CrtImNapV1kDAC8pgOt
+  </data>
+ </layer>
+ <layer id="2" name="ladders" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDEegSAc7FEbtGLVj1I5BAwC8YgEi
+  </data>
+ </layer>
+ <layer id="3" name="background" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjCSgBMTyaGLofGwAWY0y9ZwzCkYBQaCCxCYmrZKilhTzBjsAAOfyASQ=
+  </data>
+ </layer>
+ <layer id="4" name="goal" width="25" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDAYgRwc7ZOlgxygYBaNgYAAA+CgAPA==
+  </data>
+ </layer>
+ <objectgroup id="5" name="coins">
+  <object id="4" gid="24" x="2816" y="904" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="20"/>
+   </properties>
+  </object>
+  <object id="5" gid="23" x="2956" y="2120" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="6" gid="23" x="2940" y="1752" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="7" gid="23" x="2952" y="1928" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="8" gid="23" x="2940" y="1600" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+  <object id="9" gid="23" x="2944" y="1424" width="128" height="128">
+   <properties>
+    <property name="point_value" type="int" value="10"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
