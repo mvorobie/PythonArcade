@@ -1,6 +1,6 @@
 import arcade
 
-from arcade_platformer.pause_view import PauseView
+from pause_view import PauseView
 from constants import *
 
 class PlatformerView(arcade.View):
