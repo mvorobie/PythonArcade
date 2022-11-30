@@ -1,41 +1,12 @@
 import arcade
-import pathlib
 
+from arcade_platformer.pause_view import PauseView
+from constants import *
 
-# Game constants
-# Window dimensions
-
-SCREEN_WIDTH = 1290
-SCREEN_HEIGHT = 720
-SCREEN_TITLE = "Arcade Platformer"
-MAP_WIDTH = 3072
-
-# Scaling constants
-MAP_SCALING = 1.0
-
-# Player constants
-GRAVITY = 1.0
-PLAYER_START_X = 65
-PLAYER_START_Y = 256
-PLAYER_MOVE_SPEED = 10
-PLAYER_JUMP_SPEED = 25
-
-
-# Viewport margins
-LEFT_VIEWPORT_MARGIN = 300
-RIGHT_VIEWPORT_MARGIN = 300
-TOP_VIEWPORT_MARGIN = 150
-BOTTOM_VIEWPORT_MARGIN = 150
-
-# Joystick control
-DEAD_ZONE = 0.1
-
-# Assets path
-ASSETS_PATH = pathlib.Path(__file__).resolve().parent.parent / "assets"
 class PlatformerView(arcade.View):
-    def __init__(self):
+    def __init__(self, title_view: arcade.View):
         super().__init__()
-
+        self.title_view = title_view
         # These lists will hold different sets of sprites
         self.coins = None
         self.background = None
@@ -84,65 +55,73 @@ class PlatformerView(arcade.View):
     def setup(self):
         """Sets up the game for the current level"""
         # Get the current map based on the level
+
         map_name = f"platform_level_{self.level:02}.tmx"
         map_path = ASSETS_PATH / map_name
 
-        # What are the names of the layers?
-        wall_layer = "ground"
-        coin_layer = "coins"
-        goal_layer = "goal"
-        background_layer = "background"
-        ladders_layer = "ladders"
+        if map_path.exists():
+            # What are the names of the layers?
+            wall_layer = "ground"
+            coin_layer = "coins"
+            goal_layer = "goal"
+            background_layer = "background"
+            ladders_layer = "ladders"
 
-        # Load the current map
-        game_map = arcade.tilemap.read_tmx(str(map_path))
+            # Load the current map
+            game_map = arcade.tilemap.read_tmx(str(map_path))
 
-        # Load the layers
-        self.background = arcade.tilemap.process_layer(
-            game_map, layer_name=background_layer, scaling=MAP_SCALING
-        )
-        self.goals = arcade.tilemap.process_layer(
-            game_map, layer_name=goal_layer, scaling=MAP_SCALING
-        )
-        self.walls = arcade.tilemap.process_layer(
-            game_map, layer_name=wall_layer, scaling=MAP_SCALING
-        )
-        self.ladders = arcade.tilemap.process_layer(
-            game_map, layer_name=ladders_layer, scaling=MAP_SCALING
-        )
-        self.coins = arcade.tilemap.process_layer(
-            game_map, layer_name=coin_layer, scaling=MAP_SCALING
-        )
+            # Load the layers
+            self.background = arcade.tilemap.process_layer(
+                game_map, layer_name=background_layer, scaling=MAP_SCALING
+            )
+            self.goals = arcade.tilemap.process_layer(
+                game_map, layer_name=goal_layer, scaling=MAP_SCALING
+            )
+            self.walls = arcade.tilemap.process_layer(
+                game_map, layer_name=wall_layer, scaling=MAP_SCALING
+            )
+            self.ladders = arcade.tilemap.process_layer(
+                game_map, layer_name=ladders_layer, scaling=MAP_SCALING
+            )
+            self.coins = arcade.tilemap.process_layer(
+                game_map, layer_name=coin_layer, scaling=MAP_SCALING
+            )
 
-        # Set the background color
-        background_color = arcade.color.FRESH_AIR
-        if game_map.background_color:
-            background_color = game_map.background_color
-        arcade.set_background_color(background_color)
+            # Set the background color
+            background_color = arcade.color.FRESH_AIR
+            if game_map.background_color:
+                background_color = game_map.background_color
+            arcade.set_background_color(background_color)
 
-        self.map_width = (game_map.map_size.width - 1) * game_map.tile_size.width
+            self.map_width = (game_map.map_size.width - 1) * game_map.tile_size.width
 
-        # Create the player sprite if they're not already set up
-        if not self.player:
-            self.player = self.create_player_sprite()
+            # Create the player sprite if they're not already set up
+            if not self.player:
+                self.player = self.create_player_sprite()
 
-        # Move the player sprite back to the beginning
-        self.player.center_x = PLAYER_START_X
-        self.player.center_y = PLAYER_START_Y
-        self.player.change_x = 0
-        self.player.change_y = 0
+            # Move the player sprite back to the beginning
+            self.player.center_x = PLAYER_START_X
+            self.player.center_y = PLAYER_START_Y
+            self.player.change_x = 0
+            self.player.change_y = 0
 
-        # Reset the viewport
-        self.view_left = 0
-        self.view_bottom = 0
+            # Reset the viewport
+            self.view_left = 0
+            self.view_bottom = 0
 
-        # Load the physics engine for this map
-        self.physics_engine = arcade.PhysicsEnginePlatformer(
-            player_sprite=self.player,
-            platforms=self.walls,
-            gravity_constant=GRAVITY,
-            ladders=self.ladders,
-        )
+            # Load the physics engine for this map
+            self.physics_engine = arcade.PhysicsEnginePlatformer(
+                player_sprite=self.player,
+                platforms=self.walls,
+                gravity_constant=GRAVITY,
+                ladders=self.ladders,
+            )
+        else:
+            print("Reached the end of the game")
+            self.level = 1
+            self.setup()
+            self.window.show_view(self.title_view)
+
 
     def create_player_sprite(self) -> arcade.AnimatedWalkingSprite:
         """Creates the animated player sprite
@@ -233,6 +212,12 @@ class PlatformerView(arcade.View):
                 self.player.change_y = PLAYER_JUMP_SPEED
                 # Play the jump sound
                 arcade.play_sound(self.jump_sound)
+
+        # Did the user want to pause?
+        elif key == arcade.key.ESCAPE:
+            # Pass the current view to preserve this view's state
+            pause = PauseView(self)
+            self.window.show_view(pause)
 
     def on_key_release(self, key: int, modifiers: int):
         """Processes key releases
@@ -407,13 +392,3 @@ class PlatformerView(arcade.View):
             color=arcade.csscolor.WHITE,
             font_size=40,
         )
-
-
-if __name__ == "__main__":
-    window = arcade.Window(
-        width=SCREEN_WIDTH, height=SCREEN_HEIGHT, title=SCREEN_TITLE
-    )
-    platform_view = PlatformerView()
-    platform_view.setup()
-    window.show_view(platform_view)
-    arcade.run()
